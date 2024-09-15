@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"github.com/gorilla/mux"
 	e "github.com/paavosoeiro/go-movies/internal/common/err"
+	movies2 "github.com/paavosoeiro/go-movies/internal/movies"
 	"github.com/paavosoeiro/go-movies/internal/movies/service"
 	"net/http"
 )
@@ -19,9 +20,10 @@ func NewMovieHandler(service service.MovieService) *MovieHandler {
 func (m *MovieHandler) InitializeRoutes(r *mux.Router) {
 	r.HandleFunc("/movies", m.List).Methods("GET")
 	r.HandleFunc("/movies/{id}", m.GetMovieById).Methods("GET")
+	r.HandleFunc("/movies", m.CreateMovie).Methods("POST")
 }
 
-func (m *MovieHandler) List(w http.ResponseWriter, r *http.Request) {
+func (m *MovieHandler) List(w http.ResponseWriter, _ *http.Request) {
 	movies, err := m.service.GetAllMovies()
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
@@ -49,6 +51,24 @@ func (m *MovieHandler) GetMovieById(w http.ResponseWriter, r *http.Request) {
 	err = json.NewEncoder(w).Encode(movie)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+}
+
+func (m *MovieHandler) CreateMovie(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	var movie movies2.Movie
+	_ = json.NewDecoder(r.Body).Decode(&movie)
+
+	newMovie, err := m.service.CreateMovie(&movie)
+	if err != nil {
+		errorResponse := e.New(http.StatusInternalServerError, "An error has occurred", "")
+		e.SendErrorResponse(w, errorResponse)
+		return
+	}
+
+	err = json.NewEncoder(w).Encode(newMovie)
+	if err != nil {
 		return
 	}
 }

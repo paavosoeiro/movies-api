@@ -22,3 +22,7 @@ func (m *MovieServiceImpl) GetAllMovies() ([]movies.Movie, error) {
 func (m *MovieServiceImpl) GetMovieById(id string) (*movies.Movie, error) {
 	return m.repo.GetById(id)
 }
+
+func (m *MovieServiceImpl) CreateMovie(movie *movies.Movie) (*movies.Movie, error) {
+	return m.repo.Create(movie)
+}

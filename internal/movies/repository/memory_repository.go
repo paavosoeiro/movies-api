@@ -3,11 +3,13 @@ package repository
 import (
 	"errors"
 	movies2 "github.com/paavosoeiro/go-movies/internal/movies"
+	"math/rand"
+	"strconv"
 	"sync"
 )
 
 type MemoryRepository struct {
-	mu     sync.Mutex
+	mu     sync.RWMutex
 	movies map[string]movies2.Movie
 }
 
@@ -42,4 +44,17 @@ func (r *MemoryRepository) GetById(id string) (*movies2.Movie, error) {
 		return nil, errors.New("movie not found")
 	}
 	return &movie, nil
+}
+
+func (r *MemoryRepository) Create(movie *movies2.Movie) (*movies2.Movie, error) {
+	r.mu.Lock()
+	defer r.mu.Unlock()
+
+	id := strconv.Itoa(rand.Intn(1000000))
+	movie.ID = id
+
+	r.movies[id] = *movie
+
+	return movie, nil
+
 }

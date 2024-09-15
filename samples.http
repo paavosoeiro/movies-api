@@ -15,5 +15,5 @@ Content-Type: application/json
 {"isbn": "isbn", "title": "O Senhor dos Aneis", "director": {"firstname": "Pter", "lastname": "Jackson"}}
 
 ###
-GET http://localhost:8080/movies/2
+GET http://localhost:8080/movies/937358
 
