@@ -5,6 +5,7 @@ import (
 	"github.com/paavosoeiro/go-movies/internal/controller/movies"
 	"github.com/paavosoeiro/go-movies/internal/movies/repository"
 	"github.com/paavosoeiro/go-movies/internal/movies/service"
+	"github.com/paavosoeiro/go-movies/pkg/middleware"
 )
 
 func New() *mux.Router {
@@ -13,6 +14,8 @@ func New() *mux.Router {
 	movieHandler := movies.NewMovieHandler(svc)
 
 	r := mux.NewRouter()
+
+	r.Use(middleware.LoggingMiddleware)
 
 	movieHandler.InitializeRoutes(r)
 
