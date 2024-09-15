@@ -1,9 +1,7 @@
-package service
+package movies
 
 import (
 	"errors"
-	"github.com/paavosoeiro/go-movies/internal/movies"
-	"github.com/paavosoeiro/go-movies/internal/movies/repository"
 	repository2 "github.com/paavosoeiro/go-movies/mock/repository"
 	"reflect"
 	"testing"
@@ -12,23 +10,23 @@ import (
 func TestMovieServiceImpl_GetAllMovies(t *testing.T) {
 	mockRepo := new(repository2.MockMoviesRepository)
 
-	mockRepo.On("GetAll").Return([]movies.Movie{{ID: "1", Isbn: "Isbn", Title: "O Senhor dos Aneis",
-		Director: &movies.Director{Firstname: "Peter", Lastname: "Jackson"}}}, nil)
+	mockRepo.On("GetAll").Return([]Movie{{ID: "1", Isbn: "Isbn", Title: "O Senhor dos Aneis",
+		Director: &Director{Firstname: "Peter", Lastname: "Jackson"}}}, nil)
 
 	type fields struct {
-		repo repository.Repository
+		repo Repository
 	}
 	tests := []struct {
 		name    string
 		fields  fields
-		want    []movies.Movie
+		want    []Movie
 		wantErr bool
 	}{
 		{
 			name:   "return all movies",
 			fields: fields{mockRepo},
-			want: []movies.Movie{{ID: "1", Isbn: "Isbn", Title: "O Senhor dos Aneis",
-				Director: &movies.Director{Firstname: "Peter", Lastname: "Jackson"}}},
+			want: []Movie{{ID: "1", Isbn: "Isbn", Title: "O Senhor dos Aneis",
+				Director: &Director{Firstname: "Peter", Lastname: "Jackson"}}},
 			wantErr: false,
 		},
 	}
@@ -53,16 +51,16 @@ func TestMovieServiceImpl_GetAllMovies(t *testing.T) {
 func TestMovieServiceImpl_GetMovieById(t *testing.T) {
 	mockRepo := new(repository2.MockMoviesRepository)
 
-	movie := &movies.Movie{ID: "1", Isbn: "Isbn", Title: "O Senhor dos Aneis",
-		Director: &movies.Director{Firstname: "Peter", Lastname: "Jackson"}}
+	movie := &Movie{ID: "1", Isbn: "Isbn", Title: "O Senhor dos Aneis",
+		Director: &Director{Firstname: "Peter", Lastname: "Jackson"}}
 
-	mockRepo.On("GetById", "1").Return(&movies.Movie{ID: "1", Isbn: "Isbn", Title: "O Senhor dos Aneis",
-		Director: &movies.Director{Firstname: "Peter", Lastname: "Jackson"}}, nil)
+	mockRepo.On("GetById", "1").Return(&Movie{ID: "1", Isbn: "Isbn", Title: "O Senhor dos Aneis",
+		Director: &Director{Firstname: "Peter", Lastname: "Jackson"}}, nil)
 
 	mockRepo.On("GetById", "2").Return(nil, errors.New("movie not found"))
 
 	type fields struct {
-		repo repository.Repository
+		repo Repository
 	}
 	type args struct {
 		id string
@@ -71,7 +69,7 @@ func TestMovieServiceImpl_GetMovieById(t *testing.T) {
 		name    string
 		fields  fields
 		args    args
-		want    *movies.Movie
+		want    *Movie
 		wantErr bool
 	}{
 		{
