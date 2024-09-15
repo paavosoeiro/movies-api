@@ -4,20 +4,23 @@ import (
 	"encoding/json"
 	"github.com/gorilla/mux"
 	e "github.com/paavosoeiro/go-movies/internal/common/err"
+	movies2 "github.com/paavosoeiro/go-movies/internal/movies"
+	"github.com/paavosoeiro/go-movies/internal/movies/repository"
+	"github.com/paavosoeiro/go-movies/internal/movies/service"
 	"net/http"
 )
 
 type MovieHandler struct {
-	service MovieService
+	service service.MovieService
 }
 
-func NewMovieHandler(service MovieService) *MovieHandler {
+func NewMovieHandler(service service.MovieService) *MovieHandler {
 	return &MovieHandler{service: service}
 }
 
 func NewMovieHandlerFactory() *MovieHandler {
-	repo := NewMemoryRepository()
-	svc := NewMovieService(repo)
+	repo := repository.NewMemoryRepository()
+	svc := service.NewMovieService(repo)
 	return NewMovieHandler(svc)
 }
 
@@ -55,7 +58,7 @@ func (m *MovieHandler) GetMovieById(w http.ResponseWriter, r *http.Request) {
 
 func (m *MovieHandler) CreateMovie(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
-	var movie Movie
+	var movie movies2.Movie
 	_ = json.NewDecoder(r.Body).Decode(&movie)
 
 	newMovie, err := m.service.CreateMovie(&movie)

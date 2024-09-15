@@ -3,6 +3,7 @@ package movies
 import (
 	"encoding/json"
 	"github.com/gorilla/mux"
+	"github.com/paavosoeiro/go-movies/internal/movies"
 	"github.com/paavosoeiro/go-movies/mock/service"
 	"github.com/stretchr/testify/assert"
 	"net/http"
@@ -13,8 +14,8 @@ import (
 func TestMovieHandler_GetMovieById(t *testing.T) {
 	mockService := new(service.MockMovieService)
 
-	movie := &Movie{ID: "1", Isbn: "Isbn", Title: "O Senhor dos Aneis",
-		Director: &Director{Firstname: "Peter", Lastname: "Jackson"}}
+	movie := &movies.Movie{ID: "1", Isbn: "Isbn", Title: "O Senhor dos Aneis",
+		Director: &movies.Director{Firstname: "Peter", Lastname: "Jackson"}}
 
 	mockService.On("GetMovieById", "1").Return(movie, nil)
 
@@ -29,7 +30,7 @@ func TestMovieHandler_GetMovieById(t *testing.T) {
 
 	assert.Equal(t, http.StatusOK, rr.Code)
 
-	var returnedMovie Movie
+	var returnedMovie movies.Movie
 	err := json.Unmarshal(rr.Body.Bytes(), &returnedMovie)
 	if err != nil {
 		return

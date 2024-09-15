@@ -2,7 +2,7 @@ package router
 
 import (
 	"github.com/gorilla/mux"
-	"github.com/paavosoeiro/go-movies/internal/movies"
+	"github.com/paavosoeiro/go-movies/internal/controller/movies"
 	"github.com/paavosoeiro/go-movies/pkg/middleware"
 	"net/http"
 )

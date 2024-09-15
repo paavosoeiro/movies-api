@@ -23,5 +23,5 @@ func (m *MockMoviesRepository) GetById(id string) (*movies.Movie, error) {
 }
 
 func (m *MockMoviesRepository) Create(movie *movies.Movie) (*movies.Movie, error) {
-	panic("implement me")
+	return nil, nil
 }
