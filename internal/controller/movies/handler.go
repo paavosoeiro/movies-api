@@ -5,6 +5,7 @@ import (
 	"github.com/gorilla/mux"
 	e "github.com/paavosoeiro/go-movies/internal/common/err"
 	movies2 "github.com/paavosoeiro/go-movies/internal/movies"
+	"github.com/paavosoeiro/go-movies/internal/movies/repository"
 	"github.com/paavosoeiro/go-movies/internal/movies/service"
 	"net/http"
 )
@@ -17,10 +18,10 @@ func NewMovieHandler(service service.MovieService) *MovieHandler {
 	return &MovieHandler{service: service}
 }
 
-func (m *MovieHandler) InitializeRoutes(r *mux.Router) {
-	r.HandleFunc("/movies", m.List).Methods("GET")
-	r.HandleFunc("/movies/{id}", m.GetMovieById).Methods("GET")
-	r.HandleFunc("/movies", m.CreateMovie).Methods("POST")
+func NewMovieHandlerFactory() *MovieHandler {
+	repo := repository.NewMemoryRepository()
+	svc := service.NewMovieService(repo)
+	return NewMovieHandler(svc)
 }
 
 func (m *MovieHandler) List(w http.ResponseWriter, _ *http.Request) {

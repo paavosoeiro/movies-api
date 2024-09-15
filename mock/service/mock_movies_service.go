@@ -22,3 +22,7 @@ func (m *MockMovieService) GetMovieById(id string) (*movies.Movie, error) {
 
 	return nil, args.Error(1)
 }
+
+func (m *MockMovieService) CreateMovie(*movies.Movie) (*movies.Movie, error) {
+	return nil, nil
+}
