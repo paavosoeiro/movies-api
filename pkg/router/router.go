@@ -2,6 +2,7 @@ package router
 
 import (
 	"github.com/gorilla/mux"
+	"github.com/paavosoeiro/go-movies/internal/directors"
 	"github.com/paavosoeiro/go-movies/internal/movies"
 	"github.com/paavosoeiro/go-movies/pkg/middleware"
 	"net/http"
@@ -20,6 +21,7 @@ type RouteGroup struct {
 
 func New() *mux.Router {
 	movieHandler := movies.NewMovieHandlerFactory()
+	directorHandler := directors.NewDirectorHandlerFactory()
 
 	r := mux.NewRouter()
 
@@ -32,6 +34,12 @@ func New() *mux.Router {
 				{Path: "", Method: "GET", Handler: movieHandler.List},
 				{Path: "/{id}", Method: "GET", Handler: movieHandler.GetMovieById},
 				{Path: "/{id}", Method: "POST", Handler: movieHandler.CreateMovie},
+			},
+		},
+		{
+			Prefix: "/directors",
+			Routes: []Route{
+				{Path: "", Method: "GET", Handler: directorHandler.GetAllDirectors},
 			},
 		},
 	}
